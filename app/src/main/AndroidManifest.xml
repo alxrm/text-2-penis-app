@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="rm.com.text2penis">
 
+  <uses-permission android:name="android.permission.INTERNET"/>
+
   <application
       android:name=".TextToPenisApplication"
       android:allowBackup="true"
+      android:fullBackupContent="false"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
       android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,6 +20,10 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="6291e12ad6b50630902b4523420bfda9f743c2e6"/>
   </application>
+
 
 </manifest>
