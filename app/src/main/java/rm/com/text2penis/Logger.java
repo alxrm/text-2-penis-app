@@ -18,6 +18,19 @@ import android.util.Log;
     d(String.valueOf(msg != null ? msg : "null"));
   }
 
+  static void d(@Nullable Object... msgs) {
+    final StringBuilder msgBuilder = new StringBuilder();
+
+    for (int i = 0; i < msgs.length; i++) {
+      final String currentMsg = msgs[i] == null ? "null" : String.valueOf(msgs[i]);
+      final String separator = i == msgs.length - 1 ? "" : ", ";
+
+      msgBuilder.append(currentMsg).append(separator);
+    }
+
+    d(msgBuilder.toString());
+  }
+
   static void d(@Nullable String msg) {
     Log.e(LEVEL_DEBUG, "" + msg);
   }

@@ -14,11 +14,13 @@ import android.view.View;
  * Created by alex
  */
 public final class PenisTextView extends View {
+  private static final int REPEAT_COUNT = 250;
 
   @NonNull private final DimenConverter to = new DimenConverter(getContext());
-
-  @NonNull private Paint paintPenis = new Paint(Paint.ANTI_ALIAS_FLAG);
-  @NonNull private Path pathPenis = new Path();
+  @NonNull private final Paint paintPenis = new Paint(Paint.ANTI_ALIAS_FLAG);
+  @NonNull private final Path pathPenis = new Path();
+  @NonNull private final TextCalibrator calibrator = new TextCalibrator(paintPenis);
+  @NonNull private final TextRepeat repeat = new TextRepeat(REPEAT_COUNT);
 
   @Nullable private String text;
 
@@ -54,13 +56,17 @@ public final class PenisTextView extends View {
     }
   }
 
-  public void changeText(@Nullable String text) {
-    if (text == null || text.isEmpty()) {
+  final void changeText(@Nullable final String next) {
+    if (next == null || next.isEmpty()) {
       return;
     }
 
-    this.text = text;
-    redraw();
+    post(new Runnable() {
+      @Override public void run() {
+        text = calibrator.transform(pathPenis, repeat.transform(next));
+        redraw();
+      }
+    });
   }
 
   private void init() {
@@ -70,12 +76,11 @@ public final class PenisTextView extends View {
   private void initPaint() {
     paintPenis.setColor(Color.BLACK);
     paintPenis.setStyle(Paint.Style.STROKE);
-    paintPenis.setTextSize(to.sp(14));
+    paintPenis.setTextSize(to.sp(16));
   }
 
   private void initPath() {
     addPenisPath();
-    redraw();
   }
 
   private void addPenisPath() {
