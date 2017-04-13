@@ -15,6 +15,9 @@ import android.view.View;
  */
 public final class PenisTextView extends View {
   private static final int REPEAT_COUNT = 250;
+  private static final int TEXT_SIZE = 14;
+  private static final long ANIMATION_TIME = 300;
+  private static final float RELATIVE_UNITS_COUNT = 500;
 
   @NonNull private final DimenConverter to = new DimenConverter(getContext());
   @NonNull private final Paint paintPenis = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -26,6 +29,9 @@ public final class PenisTextView extends View {
 
   private float centerY;
   private float centerX;
+
+  private int cachedWidth;
+  private int cachedHeight;
 
   public PenisTextView(Context context) {
     this(context, null);
@@ -42,9 +48,12 @@ public final class PenisTextView extends View {
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    this.centerY = h / 2F;
+    this.centerY = h * 0.85F;
     this.centerX = w / 2F;
+    this.cachedWidth = w;
+    this.cachedHeight = h;
 
+    to.changeDensity(((float) h) / RELATIVE_UNITS_COUNT);
     initPath();
   }
 
@@ -52,8 +61,17 @@ public final class PenisTextView extends View {
     super.onDraw(canvas);
 
     if (text != null) {
+      canvas.drawColor(Color.WHITE);
       canvas.drawTextOnPath(text, pathPenis, 0, 0, paintPenis);
     }
+  }
+
+  final int cachedWidth() {
+    return cachedWidth;
+  }
+
+  final int cachedHeight() {
+    return cachedHeight;
   }
 
   final void changeText(@Nullable final String next) {
@@ -61,12 +79,12 @@ public final class PenisTextView extends View {
       return;
     }
 
-    post(new Runnable() {
+    postDelayed(new Runnable() {
       @Override public void run() {
         text = calibrator.transform(pathPenis, repeat.transform(next));
         redraw();
       }
-    });
+    }, ANIMATION_TIME);
   }
 
   private void init() {
@@ -75,16 +93,12 @@ public final class PenisTextView extends View {
 
   private void initPaint() {
     paintPenis.setColor(Color.BLACK);
-    paintPenis.setStyle(Paint.Style.STROKE);
-    paintPenis.setTextSize(to.sp(16));
+    paintPenis.setStyle(Paint.Style.FILL);
+    paintPenis.setTextSize(to.sp(TEXT_SIZE));
   }
 
   private void initPath() {
-    addPenisPath();
-  }
-
-  private void addPenisPath() {
-    pathPenis.moveTo(centerX, centerY + to.dp(150));
+    pathPenis.moveTo(centerX, centerY);
     pathPenis.rCubicTo(to.dp(150), to.dp(60), to.dp(150), -to.dp(120), to.dp(50), -to.dp(110));
     pathPenis.rLineTo(0, -to.dp(200));
     pathPenis.rCubicTo(0, -to.dp(80), -to.dp(100), -to.dp(80), -to.dp(100), 0);

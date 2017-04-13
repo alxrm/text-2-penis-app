@@ -13,4 +13,8 @@
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+  <style name="AppTheme.Undo">
+    <item name="colorAccent">#eeeeee</item>
+  </style>
+
 </resources>

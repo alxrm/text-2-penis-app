@@ -10,7 +10,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_centerHorizontal="true"
-      android:hint="What's up?"
+      android:hint="@string/question"
       android:layout_margin="32dp"
       android:textSize="32sp"
       />
@@ -22,6 +22,7 @@
       android:clickable="true"
       android:layout_below="@id/intro_text"
       android:layout_centerHorizontal="true"
+      android:visibility="invisible"
       app:rippleColor="@android:color/white"
       app:srcCompat="@drawable/ic_arrow_forward_24dp"
       />

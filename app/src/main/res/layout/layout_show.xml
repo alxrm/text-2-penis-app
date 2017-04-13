@@ -1,15 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
   <rm.com.text2penis.PenisTextView
       android:id="@+id/penis"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      android:layout_margin="16dp"
+      />
+
+  <!--<View-->
+      <!--android:id="@+id/shadow"-->
+      <!--android:layout_width="match_parent"-->
+      <!--android:layout_height="4dp"-->
+      <!--android:layout_below="@id/penis"-->
+      <!--android:background="@drawable/shadow"-->
+      <!--/>-->
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/share"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="56dp"
+      android:clickable="true"
+      app:fabSize="mini"
+      app:rippleColor="@android:color/white"
+      app:srcCompat="@drawable/ic_share_24dp"
+      />
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/undo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_below="@id/share"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="16dp"
+      android:clickable="true"
+      android:theme="@style/AppTheme.Undo"
+      app:fabSize="mini"
+      app:rippleColor="@color/color_separator"
+      app:srcCompat="@drawable/ic_undo_24dp"
       />
 
 </RelativeLayout>

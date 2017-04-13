@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">I\'m fine</string>
+    <string name="app_name">Current mood</string>
+    <string name="question">What\'s up?</string>
 </resources>

@@ -9,7 +9,7 @@ import android.util.DisplayMetrics;
  */
 
 final class DimenConverter {
-  private final float density;
+  private  float density;
   private final float scaledDensity;
 
   DimenConverter(@NonNull Context context) {
@@ -18,6 +18,10 @@ final class DimenConverter {
 
     this.density = metrics.density;
     this.scaledDensity = metrics.scaledDensity;
+  }
+
+  final void changeDensity(float density) {
+    this.density = density;
   }
 
   final float dp(float value) {

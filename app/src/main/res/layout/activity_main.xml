@@ -33,12 +33,12 @@
   <include
       layout="@layout/layout_intro"
       android:id="@+id/intro"
-      android:visibility="gone"
       />
 
   <include
       layout="@layout/layout_show"
       android:id="@+id/show"
+      android:visibility="gone"
       />
 
 </LinearLayout>
