@@ -62,10 +62,7 @@ public final class PenisTextView extends View {
 
     if (text != null) {
       canvas.drawColor(Color.WHITE);
-      //canvas.drawTextOnPath(text, pathPenis, 0, 0, paintPenis);
-
-      paintPenis.setStyle(Paint.Style.STROKE);
-      canvas.drawPath(pathPenis, paintPenis);
+      canvas.drawTextOnPath(text, pathPenis, 0, 0, paintPenis);
     }
   }
 
