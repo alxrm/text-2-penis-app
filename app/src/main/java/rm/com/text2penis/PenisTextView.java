@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -19,11 +18,12 @@ public final class PenisTextView extends View {
   private static final long ANIMATION_TIME = 300;
   private static final float RELATIVE_UNITS_COUNT = 500;
 
-  @NonNull private final DimenConverter to = new DimenConverter(getContext());
   @NonNull private final Paint paintPenis = new Paint(Paint.ANTI_ALIAS_FLAG);
-  @NonNull private final Path pathPenis = new Path();
+
+  @NonNull private final DimenConverter to = new DimenConverter(getContext());
   @NonNull private final TextCalibrator calibrator = new TextCalibrator(paintPenis);
   @NonNull private final TextRepeat repeat = new TextRepeat(REPEAT_COUNT);
+  @NonNull private final MeasuredPath pathPenis = new MeasuredPath();
 
   @Nullable private String text;
 
@@ -49,7 +49,7 @@ public final class PenisTextView extends View {
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
     this.centerY = h * 0.85F;
-    this.centerX = w / 2F;
+    this.centerX = w * 0.5F;
     this.cachedWidth = w;
     this.cachedHeight = h;
 
@@ -62,7 +62,10 @@ public final class PenisTextView extends View {
 
     if (text != null) {
       canvas.drawColor(Color.WHITE);
-      canvas.drawTextOnPath(text, pathPenis, 0, 0, paintPenis);
+      //canvas.drawTextOnPath(text, pathPenis, 0, 0, paintPenis);
+
+      paintPenis.setStyle(Paint.Style.STROKE);
+      canvas.drawPath(pathPenis, paintPenis);
     }
   }
 
@@ -98,12 +101,13 @@ public final class PenisTextView extends View {
   }
 
   private void initPath() {
+    pathPenis.setDimensionConverter(to);
     pathPenis.moveTo(centerX, centerY);
-    pathPenis.rCubicTo(to.dp(150), to.dp(60), to.dp(150), -to.dp(120), to.dp(50), -to.dp(110));
-    pathPenis.rLineTo(0, -to.dp(200));
-    pathPenis.rCubicTo(0, -to.dp(80), -to.dp(100), -to.dp(80), -to.dp(100), 0);
-    pathPenis.rLineTo(0, to.dp(200));
-    pathPenis.rCubicTo(-to.dp(100), -to.dp(10), -to.dp(100), to.dp(170), to.dp(50), to.dp(110));
+    pathPenis.rCubicTo(150, 60, 150, -120, 50, -110);
+    pathPenis.rLineTo(0, -200);
+    pathPenis.rCubicTo(0, -80, -100, -80, -100, 0);
+    pathPenis.rLineTo(0, 200);
+    pathPenis.rCubicTo(-100, -10, -100, 170, 50, 110);
   }
 
   private void redraw() {
