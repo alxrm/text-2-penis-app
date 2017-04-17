@@ -1,10 +1,8 @@
 package rm.com.text2penis;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,11 +18,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static android.content.Intent.ACTION_SEND;
 
 public final class MainActivity extends AppCompatActivity {
   private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
@@ -82,7 +80,8 @@ public final class MainActivity extends AppCompatActivity {
   }
 
   @OnClick(R.id.share) final void onShare() {
-    final Bitmap penisBitmap = loadBitmapFromView(penis);
+    final ViewBitmap bitmapView = new ViewBitmap(penis);
+    final Bitmap penisBitmap = bitmapView.renderBitmap(penis.cachedWidth(), penis.cachedHeight());
 
     EXECUTOR.submit(new Runnable() {
       @Override public void run() {
@@ -99,33 +98,18 @@ public final class MainActivity extends AppCompatActivity {
     }
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored") @SuppressLint("SetWorldReadable")
   private void shareBitmap(@NonNull Bitmap bitmap, @NonNull String fileName) {
     try {
-      final File file = new File(getCacheDir(), fileName + ".png");
-      final FileOutputStream fOut = new FileOutputStream(file);
-      final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-      fOut.flush();
-      fOut.close();
-      file.setReadable(true, false);
+      final Intent intent = new Intent(ACTION_SEND);
+      final FileBitmap file = new FileBitmap(bitmap, getCacheDir().getPath(), fileName);
 
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+      intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.toSavedFile(FileBitmap.JPG)));
       intent.setType("image/jpg");
       startActivity(intent);
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  private Bitmap loadBitmapFromView(PenisTextView p) {
-    Bitmap image = Bitmap.createBitmap(p.cachedWidth(), p.cachedHeight(), Bitmap.Config.ARGB_8888);
-    Canvas canvas = new Canvas(image);
-    p.layout(p.getLeft(), p.getTop(), p.getRight(), p.getBottom());
-    p.draw(canvas);
-    return image;
   }
 
   private void hideKeyboard(@NonNull View fromView) {
