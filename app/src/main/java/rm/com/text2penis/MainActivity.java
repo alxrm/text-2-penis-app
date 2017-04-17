@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -98,18 +99,24 @@ public final class MainActivity extends AppCompatActivity {
     }
   }
 
-  private void shareBitmap(@NonNull Bitmap bitmap, @NonNull String fileName) {
+  @WorkerThread private void shareBitmap(@NonNull Bitmap bitmap, @NonNull String fileName) {
     try {
-      final Intent intent = new Intent(ACTION_SEND);
-      final FileBitmap file = new FileBitmap(bitmap, getCacheDir().getPath(), fileName);
-
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.toSavedFile(FileBitmap.JPG)));
-      intent.setType("image/jpg");
+      final FileBitmap fileBitmap = new FileBitmap(bitmap, getCacheDir().getPath(), fileName);
+      final Intent intent = makeBitmapShareIntent(fileBitmap);
       startActivity(intent);
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private Intent makeBitmapShareIntent(FileBitmap file) throws IOException {
+    final Intent result = new Intent(ACTION_SEND);
+
+    result.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    result.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.toSavedFile(FileBitmap.JPG)));
+    result.setType("image/jpg");
+
+    return result;
   }
 
   private void hideKeyboard(@NonNull View fromView) {

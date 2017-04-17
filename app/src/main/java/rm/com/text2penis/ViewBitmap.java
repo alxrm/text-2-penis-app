@@ -17,7 +17,7 @@ final class ViewBitmap {
   }
 
   @NonNull final Bitmap renderBitmap(int width, int height) {
-    final Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+    final Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
     final Canvas canvas = new Canvas(image);
 
     view.layout(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());

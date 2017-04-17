@@ -1,9 +1,7 @@
 package rm.com.text2penis;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,15 +27,11 @@ final class FileBitmap {
     this.name = name;
   }
 
-  @SuppressLint("SetWorldReadable") @WorkerThread @Nullable
-  final File toSavedFile(@NonNull String extension) throws IOException {
+  @SuppressWarnings("All") @WorkerThread
+  @NonNull final File toSavedFile(@NonNull String extension) throws IOException {
     final File file = new File(directory, String.format("%s.%s", name, extension));
     final FileOutputStream outputStream = new FileOutputStream(file);
-    final boolean isSetReadable = file.setReadable(true, false);
-
-    if (isSetReadable) {
-      return file;
-    }
+    file.setReadable(true, false);
 
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
